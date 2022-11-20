@@ -1,0 +1,25 @@
+<!Doctype html>
+<html>
+    
+    <head>
+        <div>
+            <h1>Tensflow Inference</h1>
+        </div>
+    </head>
+    <body>
+        <div>
+            <form method="post">
+                <div>
+                    <label>Enter the Image URL:</label>
+                    <input type="text" id="url" name="url">
+                    <br>
+                    <input type="submit" value="predict">
+                </div>
+                <div>
+                    <h3>Class Name: {{class_name}}</h3>
+                    <h3>Confidence: {{confidence}}</h3>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
