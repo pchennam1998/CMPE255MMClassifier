@@ -17,9 +17,9 @@ parser.add_argument('--data_type', default='imagefolder', choices=['tfds', 'kera
                     help='the type of data')  # gs://cmpelkk_imagetest/*.tfrec
 parser.add_argument('--data_path', type=str, default='/home/lkk/.keras/datasets/flower_photos',
                     help='path to get data')
-parser.add_argument('--img_height', type=int, default=180,
+parser.add_argument('--img_height', type=int, default=28,
                     help='resize to img height')
-parser.add_argument('--img_width', type=int, default=180,
+parser.add_argument('--img_width', type=int, default=28,
                     help='resize to img width')
 # network
 parser.add_argument('--model_name', default='cnnsimple4', choices=['cnnsimple1', 'cnnsimple2', 'cnnsimple3', 'cnnsimple4','mobilenetmodel1'],
@@ -68,7 +68,7 @@ def PILgetonlineimagearray(url, img_height, img_width):
     from numpy import asarray
 
     from urllib.request import urlopen
-    from PIL import Image
+    from PIL import Image, ImageOps
 
     image = Image.open(urlopen(url))
 
@@ -76,6 +76,7 @@ def PILgetonlineimagearray(url, img_height, img_width):
     # (This is not mandatory)
     width, height = image.size
     image=image.resize((img_width, img_height)) #(width, height) https://pillow.readthedocs.io/en/stable/reference/Image.html
+    image=ImageOps.grayscale(image)
 
     # imgpath=requests.get(url, stream=True).raw
     # image = Image.open(imgpath)
@@ -108,15 +109,16 @@ def inference(infermodel, img_np, class_names):
 
 def main():
 
-    model=loadsavedmodel(args.model_path)
+    model=loadsavedmodel('C:/Users/pchen/Downloads/CMPE255MMClassifier/TFClassifier/outputs/fashion')
 
-    url='https://www.jacksonandperkins.com/images/xxl/v1780.jpg'#rose
+    url='https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_533,b_rgb:f5f5f5/cms/z0Z7JaTiFmKncrgGOxJp7/24a0b02e2071298fe8da4628fcb7c375/Men_s_Wool_Runners_-_Natural_Grey__Light_Grey_Sole__-_imageAngle'#rose
     img_array = PILgetonlineimagearray(url, args.img_height, args.img_width)
 
     pltgetonlineimagearray(url)
     #img_array = tfgetimagearray(args.data_path, args.img_height, args.img_width)
 
-    class_names=['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
+    class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+                   'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
     inference(model, img_array, class_names)
 
 if __name__ == '__main__':
